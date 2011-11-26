@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Chat</title>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js">
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                ws = new WebSocket("ws://localhost:8000");
+                ws.onmessage = function(event){
+                    data = escape(event.data)
+                    $("#log ul").append('<li>' + event.data + '</li>');
+                };
+                $("#entry").keydown(function(event){
+                    if(event.keyCode != 13) return;
+                    var msg = $("#entry").attr('value');
+                    if(msg){
+                        ws.send(msg);
+                        $("#entry").attr('value', '');
+                        $("#entry").focus();
+                    }
+                });
+            });
+
+        </script>
+    </head>
+    <body>
+        <h1>Chat</h1>
+        <div id="log">
+            <ul></ul>
+        </div>
+        <div id="console">
+            <input type="text" id="entry"/>
+        </div>
+    </body>
+</html>
+
